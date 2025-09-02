@@ -1,10 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
+using ll = long long;
 
-vector<long long> lucky;
+vector<ll> lucky;
 
-// generate lucky numbers up to 1e10
-void generate(long long num) {
+// generate lucky numbers recursively
+void generate(ll num) {
     if (num > 1e10) return;
     if (num > 0) lucky.push_back(num);
     generate(num * 10 + 4);
@@ -12,21 +13,26 @@ void generate(long long num) {
 }
 
 int main() {
-    long long l, r;
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    ll l, r;
     cin >> l >> r;
-    
-    // generate lucky numbers
+
+    // generate all lucky numbers up to 1e10
     generate(0);
     sort(lucky.begin(), lucky.end());
 
-    long long ans = 0;
-    long long current = l;
-    
-    for (long long L : lucky) {
-        if (current > r) break;
-        long long right = min(r, L);
-        ans += (right - current + 1) * L; // all x in [current, right] map to L
-        current = right + 1;
+    ll ans = 0;
+    ll cur = l;
+
+    for (ll L : lucky) {
+        if (cur > r) break;
+        if (L >= cur) {
+            ll right = min(r, L);
+            ans += (right - cur + 1) * L;
+            cur = right + 1;
+        }
     }
 
     cout << ans << "\n";
